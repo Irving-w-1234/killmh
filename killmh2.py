@@ -62,13 +62,16 @@ class MyApp(QWidget):
         self.btn2.setDisabled(False)
 
         self.timer = QTimer()
+        val = self.le2.text()
+
+        self.timer.start(int(val) * 60 * 1000)  # 开始计时器
+
+        # ---------------------定时执行-----------------------
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(self.start_kill_mh)  # 当时间间隔过去后，触发delayed_function
-        val = self.le2.text()
-        self.timer.start(int(val) * 60)  # 开始计时器
 
+        # ---------------------倒计时-----------------------
         self.count_backwards = int(val) * 60
-
         self.timer2 = QTimer()
         self.timer2.timeout.connect(self.countdown)
         self.timer2.setInterval(1000)
@@ -103,12 +106,12 @@ class MyApp(QWidget):
         proc = []
         pros_name = self.le1.text()
 
-        for p in psutil.process_iter(['pid','name']):
+        for p in psutil.process_iter(['pid', 'name']):
 
             if pros_name.lower() == p.name().lower():
                 proc.append((p.pid, p.name()))
 
-        if len(proc) == 0 :
+        if len(proc) == 0:
             QMessageBox.critical(self, '错误', '没有找到该进程')
             return
 
